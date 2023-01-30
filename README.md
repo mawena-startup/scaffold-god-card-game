@@ -4,10 +4,34 @@
 
 ![Gameplay](https://i.ibb.co/4P2C08x/image.png)
 
-## Instructions on setting up the Web3 part of the project
+# 🏄‍♂️ Quick Start
 
-0. `cd vaxgods-scaffold-eth-card-game `
-1. `yarn install` after installation
-2. `yarn chain` first terminal
-3. `yarn deploy` second terminal
-4. `yarn start ` third terminal
+Prerequisites: [Node (v16 LTS)](https://nodejs.org/en/download/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/) and [Git](https://git-scm.com/downloads)
+
+> clone/fork 🏗 scaffold-eth:
+
+```bash
+git clone https://github.com/KcPele/avaxgods-scaffold-eth-card-game.git
+```
+
+> install and start your 👷‍ Hardhat chain:
+
+```bash
+cd avaxgods-scaffold-eth-card-game
+yarn install
+yarn chain
+```
+
+> in a second terminal window, start your 📱 frontend:
+
+```bash
+cd avaxgods-scaffold-eth-card-game
+yarn deploy
+```
+
+> in a third terminal window, 🛰 deploy your contract:
+
+```bash
+cd avaxgods-scaffold-eth-card-game
+yarn start
+```
