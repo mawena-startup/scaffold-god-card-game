@@ -1,17 +1,21 @@
-import React from 'react';
+import React from "react";
 
-import { logo, heroImg } from '../../assets';
-import styles from '../../styles';
-import { Link, useNavigate } from 'react-router-dom';
-import { useStateContext } from '../../context/StateContext';
-import Alert from './Alert';
+import { logo, heroImg } from "../../assets";
+import styles from "../../styles";
+import { Link, useNavigate } from "react-router-dom";
+import { useStateContext } from "../../context/StateContext";
+import Alert from "./Alert";
+import NetworkSwitch from "../NetworkSwitch";
+import Account from "../Account";
+import FaucetHint from "../FaucetHint";
+import Navbar from "./Navbar";
+const { ethers } = require("ethers");
 const PageHOC = (Component, title, description) => () => {
   //   let navigate = useNavigate();
-  // const { showAlert } = useStateContext();
+
   return (
     <div className={styles.hocContainer}>
-      {/* {showAlert?.status && <Alert type={showAlert.type} message={showAlert.message} />} */}
-
+      <Navbar />
       <div className={styles.hocContentBox}>
         <Link to="/">
           <img src={logo} alt="logo" className={styles.hocLogo} />

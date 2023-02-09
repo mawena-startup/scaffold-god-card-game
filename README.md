@@ -34,4 +34,8 @@ yarn deploy
 ```bash
 cd avaxgods-scaffold-eth-card-game
 yarn start
+
+
 ```
+
+0x6Ab310C18Fd861D6DD6E1523d948fF099eBFB153

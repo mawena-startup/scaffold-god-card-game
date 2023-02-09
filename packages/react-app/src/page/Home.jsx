@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { CustomButton, CustomInput, PageHOC } from '../components/avaxgods';
-import { useStateContext } from '../context/StateContext';
-import { useNavigate } from 'react-router-dom';
-import { useContractReader } from 'eth-hooks';
+import React, { useEffect, useState } from "react";
+import { CustomButton, CustomInput, PageHOC } from "../components/avaxgods";
+import { useStateContext } from "../context/StateContext";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { contract, address, gameData, setShowAlert, setErrorMessage, readContracts, tx, writeContracts } =
     useStateContext();
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState("");
   const navigate = useNavigate();
 
   const handleClick = async () => {
@@ -19,11 +18,11 @@ const Home = () => {
 
         setShowAlert({
           status: true,
-          type: 'info',
+          type: "info",
           message: `${playerName} is being summoned!`,
         });
 
-        setTimeout(() => navigate('/create-battle'), 8000);
+        setTimeout(() => navigate("/create-battle"), 8000);
       }
       // await tx(writeContracts.AVAXGods.registerPlayer(playerName, playerName, { gasLimit: 500000 }));
       // navigate('/create-battle');
@@ -33,8 +32,8 @@ const Home = () => {
 
       setShowAlert({
         status: true,
-        type: 'failure',
-        message: 'something went wrong',
+        type: "failure",
+        message: "something went wrong",
       });
     }
   };
@@ -44,7 +43,7 @@ const Home = () => {
       const playerExists = await contract.isPlayer(address);
       const playerTokenExists = await contract.isPlayerToken(address);
 
-      if (playerExists && playerTokenExists) navigate('/create-battle');
+      if (playerExists && playerTokenExists) navigate("/create-battle");
     };
 
     if (contract) createPlayerToken();

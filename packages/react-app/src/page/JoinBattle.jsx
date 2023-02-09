@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { CustomButton, PageHOC } from '../components/avaxgods';
-import styles from '../styles';
-import { useStateContext } from '../context/StateContext';
+import { CustomButton, PageHOC } from "../components/avaxgods";
+import styles from "../styles";
+import { useStateContext } from "../context/StateContext";
 
 const JoinBattle = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const JoinBattle = () => {
       // await contract.joinBattle(battleName);
       tx(writeContracts.AVAXGods.joinBattle(battleName));
 
-      setShowAlert({ status: true, type: 'success', message: `Joining ${battleName}` });
+      setShowAlert({ status: true, type: "success", message: `Joining ${battleName}` });
     } catch (error) {
       setErrorMessage(error);
     }
@@ -47,7 +47,7 @@ const JoinBattle = () => {
         )}
       </div>
 
-      <p className={styles.infoText} onClick={() => navigate('/create-battle')}>
+      <p className={styles.infoText} onClick={() => navigate("/create-battle")}>
         Or create a new battle
       </p>
     </>

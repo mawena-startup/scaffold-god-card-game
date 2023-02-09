@@ -7,7 +7,7 @@ import { alertIcon, gameRules } from "../../assets";
 import styles from "../../styles";
 
 const GameInfo = () => {
-  const { contract, gameData, setErrorMessage, setShowAlert } = useStateContext();
+  const { contract, gameData, setErrorMessage, setShowAlert, tx, writeContracts } = useStateContext();
   const [toggleSidebar, setToggleSidebar] = useState(false);
   const navigate = useNavigate();
 
@@ -15,9 +15,11 @@ const GameInfo = () => {
     const battleName = gameData.activeBattle.name;
 
     try {
-      await contract.quitBattle(battleName);
+      // await contract.quitBattle(battleName);
+      await tx(writeContracts.AVAXGods.quitBattle(battleName));
 
       setShowAlert({ status: true, type: "info", message: `You're quitting the ${battleName}` });
+      navigate("/create-battle");
     } catch (error) {
       setErrorMessage(error);
     }

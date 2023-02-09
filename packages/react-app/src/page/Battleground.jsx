@@ -1,11 +1,11 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-import styles from '../styles';
-import { Alert } from '../components/avaxgods';
-import { battlegrounds } from '../assets';
+import styles from "../styles";
+import { Alert } from "../components/avaxgods";
+import { battlegrounds } from "../assets";
 
-import { useStateContext } from '../context/StateContext';
+import { useStateContext } from "../context/StateContext";
 
 const Battleground = () => {
   const navigate = useNavigate();
@@ -14,9 +14,9 @@ const Battleground = () => {
   const handleBattleChoice = ground => {
     setBattleGround(ground.id);
 
-    localStorage.setItem('battleground', ground.id);
+    localStorage.setItem("battleground", ground.id);
 
-    setShowAlert({ status: true, type: 'info', message: `${ground.name} is battle ready!` });
+    setShowAlert({ status: true, type: "info", message: `${ground.name} is battle ready!` });
 
     setTimeout(() => {
       navigate(-1);

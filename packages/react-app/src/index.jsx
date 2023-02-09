@@ -1,14 +1,14 @@
+import "./index.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import React from "react";
 import { ThemeSwitcherProvider } from "react-css-theme-switcher";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ReactDOM from "react-dom";
-import App from "./App";
-import "./index.css";
-import "react-tooltip/dist/react-tooltip.css";
+// import App from "./App";
 import { Home, CreateBattle, JoinBattle, Battle, Battleground } from "./page";
 import StateContext from "./context/StateContext";
 import { OnboardModal } from "./components/avaxgods";
+// import "react-tooltip/dist/react-tooltip.css";
 
 const themes = {
   dark: `${process.env.PUBLIC_URL}/dark-theme.css`,

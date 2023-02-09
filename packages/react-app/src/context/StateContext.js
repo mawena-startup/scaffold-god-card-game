@@ -5,24 +5,26 @@ import {
   useGasPrice,
   // useOnBlock,
   useUserProviderAndSigner,
-} from 'eth-hooks';
-import { useExchangeEthPrice } from 'eth-hooks/dapps/dex';
-import React, { useCallback, useEffect, useState, createContext, useContext, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { NETWORKS, ALCHEMY_KEY } from '../constants';
-import externalContracts from '../contracts/external_contracts';
+} from "eth-hooks";
+import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
+import React, { useCallback, useEffect, useState, createContext, useContext, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { NETWORKS, ALCHEMY_KEY } from "../constants";
+import externalContracts from "../contracts/external_contracts";
 // contracts
-import deployedContracts from '../contracts/hardhat_contracts.json';
-import { Transactor, Web3ModalSetup } from '../helpers';
+import deployedContracts from "../contracts/hardhat_contracts.json";
+import { Transactor, Web3ModalSetup } from "../helpers";
 
-import { useStaticJsonRPC } from '../hooks';
+import { useStaticJsonRPC } from "../hooks";
 
 // custome import
-import { GetParams } from '../utils/onboard.js';
-import { useEventListener } from 'eth-hooks/events/useEventListener';
-import { createEventListeners, createNewPlayerEventListener } from './createEventListeners';
+import { GetParams } from "../utils/onboard.js";
+import { useEventListener } from "eth-hooks/events/useEventListener";
+import { createEventListeners, createNewPlayerEventListener } from "./createEventListeners";
+import { playAudio, sparcle } from "../utils/animation.js";
+import { defenseSound } from "../assets";
 
-const { ethers } = require('ethers');
+const { ethers } = require("ethers");
 
 /*
     Welcome to 🏗 scaffold-eth !
@@ -56,16 +58,16 @@ const web3Modal = Web3ModalSetup();
 
 // 🛰 providers
 const providers = [
-  'https://eth-mainnet.gateway.pokt.network/v1/lb/611156b4a585a20035148406',
+  "https://eth-mainnet.gateway.pokt.network/v1/lb/611156b4a585a20035148406",
   `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_KEY}`,
-  'https://rpc.scaffoldeth.io:48544',
+  "https://rpc.scaffoldeth.io:48544",
 ];
 
 const Context = createContext();
 
 const StateContext = ({ children }) => {
   // this section sets your provider ============================
-  const networkOptions = [initialNetwork.name, 'mainnet', 'goerli'];
+  const networkOptions = [initialNetwork.name, "mainnet", "goerli"];
 
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
@@ -77,11 +79,16 @@ const StateContext = ({ children }) => {
   const [battleGround, setBattleGround] = useState("url('/src/assets/background/astral.jpg')");
   const [step, setStep] = useState(1);
   const [gameData, setGameData] = useState({ players: [], pendingBattles: [], activeBattle: null });
-  const [showAlert, setShowAlert] = useState({ status: false, type: 'info', message: '' });
-  const [battleName, setBattleName] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [showAlert, setShowAlert] = useState({ status: false, type: "info", message: "" });
+  const [battleName, setBattleName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [contract, setContract] = useState(null);
   const [updateGameData, setUpdateGameData] = useState(0);
+  const [checkNewPlayer, setCheckNewPlayer] = useState(false);
+  const [checkNewBattle, setCheckNewBattle] = useState(false);
+  const [checkBattleMove, setCheckBattleMove] = useState(false);
+  const [checkBattleEnded, setCheckBattleEnded] = useState(false);
+  const [checkRoundEnded, setCheckRoundEnded] = useState(false);
 
   const player1Ref = useRef();
   const player2Ref = useRef();
@@ -89,12 +96,12 @@ const StateContext = ({ children }) => {
   let navigate = useNavigate();
   //* Set battleground to local storage
   useEffect(() => {
-    const isBattleground = localStorage.getItem('battleground');
+    const isBattleground = localStorage.getItem("battleground");
 
     if (isBattleground) {
       setBattleGround(isBattleground);
     } else {
-      localStorage.setItem('battleground', battleGround);
+      localStorage.setItem("battleground", battleGround);
     }
   }, []);
 
@@ -116,7 +123,7 @@ const StateContext = ({ children }) => {
   useEffect(() => {
     if (showAlert?.status) {
       const timer = setTimeout(() => {
-        setShowAlert({ status: false, type: 'info', message: '' });
+        setShowAlert({ status: false, type: "info", message: "" });
       }, [5000]);
 
       return () => clearTimeout(timer);
@@ -126,12 +133,12 @@ const StateContext = ({ children }) => {
   //* Handle error messages
   useEffect(() => {
     if (errorMessage) {
-      const parsedErrorMessage = errorMessage?.reason?.slice('execution reverted: '.length).slice(0, -1);
+      const parsedErrorMessage = errorMessage?.reason?.slice("execution reverted: ".length).slice(0, -1);
 
       if (parsedErrorMessage) {
         setShowAlert({
           status: true,
-          type: 'failure',
+          type: "failure",
           message: parsedErrorMessage,
         });
       }
@@ -155,11 +162,11 @@ const StateContext = ({ children }) => {
   if (DEBUG) console.log(`Using ${selectedNetwork} network`);
 
   // 🛰 providers
-  if (DEBUG) console.log('📡 Connecting to Mainnet Ethereum');
+  if (DEBUG) console.log("📡 Connecting to Mainnet Ethereum");
   //  can be called on your logout button
   const logoutOfWeb3Modal = async () => {
     await web3Modal.clearCachedProvider();
-    if (injectedProvider && injectedProvider.provider && typeof injectedProvider.provider.disconnect == 'function') {
+    if (injectedProvider && injectedProvider.provider && typeof injectedProvider.provider.disconnect == "function") {
       await injectedProvider.provider.disconnect();
     }
     setTimeout(() => {
@@ -171,7 +178,7 @@ const StateContext = ({ children }) => {
   const price = useExchangeEthPrice(targetNetwork, mainnetProvider);
 
   /* 🔥 This hook will get the price of Gas from ⛽️ EtherGasStation */
-  const gasPrice = useGasPrice(targetNetwork, 'fast');
+  const gasPrice = useGasPrice(targetNetwork, "fast");
   // Use your injected provider from 🦊 Metamask or if you don't have it then instantly generate a 🔥 burner wallet.
   const userProviderAndSigner = useUserProviderAndSigner(injectedProvider, localProvider, USE_BURNER_WALLET);
   const userSigner = userProviderAndSigner.signer;
@@ -217,16 +224,87 @@ const StateContext = ({ children }) => {
   // If you want to bring in the mainnet DAI contract it would look like:
   const mainnetContracts = useContractLoader(mainnetProvider, contractConfig);
 
+  //* Get battle card coordinates
+  const getCoords = cardRef => {
+    const { left, top, width, height } = cardRef.current.getBoundingClientRect();
+
+    return {
+      pageX: left + width / 2,
+      pageY: top + height / 2.25,
+    };
+  };
+
+  const emptyAccount = "0x0000000000000000000000000000000000000000";
+
   // 📟 Listen for broadcast events
-  const newPlayerEvents = useEventListener(readContracts, 'AVAXGods', 'NewPlayer', injectedProvider, 1);
-  if (newPlayerEvents[0]?.args[0]) {
-    console.log(newPlayerEvents[0]?.args[0], 'calling the new player event from state context');
+  const newPlayerEvents = useEventListener(readContracts, "AVAXGods", "NewPlayer", injectedProvider, 1);
+  if (newPlayerEvents[0]?.args[0] && !checkNewPlayer) {
+    if (address === newPlayerEvents[0]?.args[0]) {
+      setShowAlert({
+        status: true,
+        type: "success",
+        message: "Player has been successfully registered",
+      });
+    }
+    setCheckNewPlayer(true);
+    console.log(newPlayerEvents[0]?.args?.owner, "calling the new player event from state context");
   }
 
-  const newBattleEvents = useEventListener(readContracts, 'AVAXGods', 'NewBattle', injectedProvider, 1);
-  if (newBattleEvents[0]?.args) {
-    console.log(newBattleEvents[0]?.args, 'calling the new battle event from state context');
+  //new battle event check here
+  const newBattleEvents = useEventListener(readContracts, "AVAXGods", "NewBattle", injectedProvider, 1);
+  if (newBattleEvents[0]?.args && !checkNewBattle && address) {
+    if (
+      address.toLowerCase() === newBattleEvents[0]?.args.player1.toLowerCase() ||
+      address.toLowerCase() === newBattleEvents[0]?.args.player2.toLowerCase()
+    ) {
+      navigate(`/battle/${newBattleEvents[0]?.args.battleName}`);
+    }
+
+    setUpdateGameData(prevUpdateGameData => prevUpdateGameData + 1);
+    setCheckNewBattle(true);
+    console.log(newBattleEvents[0]?.args, "calling the new battle event from state context");
   }
+
+  const newBattleEventMove = useEventListener(readContracts, "AVAXGods", "BattleMove", injectedProvider, 1);
+  if (newBattleEventMove[0]?.args) {
+    console.log(newBattleEventMove[0]?.args, " battle move event from state context");
+  }
+
+  const newRoundEndedEvent = useEventListener(readContracts, "AVAXGods", "RoundEnded", injectedProvider, 1);
+  console.log(newRoundEndedEvent[0]?.args, "battle rounded");
+  if (newRoundEndedEvent[0]?.args && !checkRoundEnded) {
+    for (let i = 0; i < newRoundEndedEvent[0]?.args.damagedPlayers.length; i += 1) {
+      if (newRoundEndedEvent[0]?.args.damagedPlayers[i] !== emptyAccount) {
+        if (newRoundEndedEvent[0]?.args.damagedPlayers[i] === address) {
+          sparcle(getCoords(player1Ref));
+        } else if (newRoundEndedEvent[0]?.args.damagedPlayers[i] !== address) {
+          sparcle(getCoords(player2Ref));
+        }
+      } else {
+        playAudio(defenseSound);
+      }
+    }
+
+    setUpdateGameData(prevUpdateGameData => prevUpdateGameData + 1);
+
+    setCheckRoundEnded(true);
+    console.log(newRoundEndedEvent[0]?.args, " round ended from state context");
+  }
+
+  const newBattleEventEnded = useEventListener(readContracts, "AVAXGods", "BattleEnded", injectedProvider, 1);
+  // console.log(newBattleEventEnded[0]?.args, "battle ended");
+  if (newBattleEventEnded[0]?.args && !checkBattleEnded) {
+    console.log(newBattleEventEnded[0]?.args, " battle ended from state context");
+    if (address.toLowerCase() === newBattleEventEnded[0]?.args.winner.toLowerCase()) {
+      setShowAlert({ status: true, type: "success", message: "You won!" });
+    } else if (address.toLowerCase() === newBattleEventEnded[0]?.args.loser.toLowerCase()) {
+      setShowAlert({ status: true, type: "failure", message: "You lost!" });
+    }
+
+    navigate("/create-battle");
+    setCheckBattleEnded(true);
+  }
+
   //handling every envent
   // useEffect(() => {
   //   if (newBattleEvents.length > 0) {
@@ -255,22 +333,6 @@ const StateContext = ({ children }) => {
     setSmartContractAndProvider();
   }, [address]);
 
-  //* Activate event listeners for the smart contract
-  useEffect(() => {
-    if (step === -1 && contract) {
-      createEventListeners({
-        navigate,
-        contract,
-        injectedProvider,
-        address,
-        setShowAlert,
-        player1Ref,
-        player2Ref,
-        setUpdateGameData,
-      });
-    }
-  }, [step, contract]);
-
   //* Set the game data to the state
   // const fetchedAllBattles = useContractReader(readContracts, 'AVAXGods', 'getAllBattles');
   // console.log('all battles', fetchedAllBattles);
@@ -284,7 +346,7 @@ const StateContext = ({ children }) => {
         if (fetchedBattles) {
           fetchedBattles?.forEach(battle => {
             if (battle.players.find(player => player.toLowerCase() === address.toLowerCase())) {
-              if (battle.winner.startsWith('0x00')) {
+              if (battle.winner.startsWith("0x00")) {
                 activeBattle = battle;
               }
             }
@@ -299,8 +361,8 @@ const StateContext = ({ children }) => {
   }, [contract, updateGameData]);
 
   // Then read your DAI balance like:
-  const myMainnetDAIBalance = useContractReader(mainnetContracts, 'DAI', 'balanceOf', [
-    '0x34aA3F359A9D614239015126635CE7732c18fDF3',
+  const myMainnetDAIBalance = useContractReader(mainnetContracts, "DAI", "balanceOf", [
+    "0x34aA3F359A9D614239015126635CE7732c18fDF3",
   ]);
 
   //
@@ -318,9 +380,9 @@ const StateContext = ({ children }) => {
       writeContracts &&
       mainnetContracts
     ) {
-      console.log('_____________________________________ 🏗 scaffold-eth _____________________________________');
+      console.log("_____________________________________ 🏗 scaffold-eth _____________________________________");
 
-      console.log('🌎 mainnetProvider', mainnetProvider);
+      console.log("🌎 mainnetProvider", mainnetProvider);
       // console.log('🏠 localChainId', localChainId);
       // console.log('👩‍💼 selected address:', address);
       // console.log('🕵🏻‍♂️ selectedChainId:', selectedChainId);
@@ -344,6 +406,35 @@ const StateContext = ({ children }) => {
     myMainnetDAIBalance,
   ]);
 
+  //* Activate event listeners for the smart contract
+  useEffect(() => {
+    if (step === -1 && contract) {
+      createEventListeners({
+        navigate,
+        contract,
+        injectedProvider,
+        address,
+        setShowAlert,
+        player1Ref,
+        player2Ref,
+        setUpdateGameData,
+      });
+    }
+  }, [
+    step,
+    contract,
+    mainnetProvider,
+    address,
+    selectedChainId,
+    yourLocalBalance,
+    yourMainnetBalance,
+    readContracts,
+    writeContracts,
+    mainnetContracts,
+    localChainId,
+    myMainnetDAIBalance,
+  ]);
+
   const loadWeb3Modal = useCallback(async () => {
     const provider = await web3Modal.connect();
     const resetParams = async () => {
@@ -354,18 +445,18 @@ const StateContext = ({ children }) => {
 
     setInjectedProvider(new ethers.providers.Web3Provider(provider));
 
-    provider.on('chainChanged', chainId => {
+    provider.on("chainChanged", chainId => {
       console.log(`chain changed to ${chainId}! updating providers`);
       setInjectedProvider(new ethers.providers.Web3Provider(provider));
     });
 
-    provider.on('accountsChanged', () => {
+    provider.on("accountsChanged", () => {
       console.log(`account changed!`);
       setInjectedProvider(new ethers.providers.Web3Provider(provider));
     });
 
     // Subscribe to session disconnection
-    provider.on('disconnect', (code, reason) => {
+    provider.on("disconnect", (code, reason) => {
       console.log(code, reason);
       logoutOfWeb3Modal();
     });
@@ -385,7 +476,7 @@ const StateContext = ({ children }) => {
     // checkSafeApp();
   }, [loadWeb3Modal]);
 
-  const faucetAvailable = localProvider && localProvider.connection && targetNetwork.name.indexOf('local') !== -1;
+  const faucetAvailable = localProvider && localProvider.connection && targetNetwork.name.indexOf("local") !== -1;
 
   return (
     <Context.Provider
@@ -433,6 +524,8 @@ const StateContext = ({ children }) => {
         setBattleName,
         battleName,
         contract,
+        player1Ref,
+        player2Ref,
       }}
     >
       {children}
