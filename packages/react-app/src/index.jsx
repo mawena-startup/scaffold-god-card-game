@@ -7,8 +7,6 @@ import ReactDOM from "react-dom";
 import { Home, CreateBattle, JoinBattle, Battle, Battleground } from "./page";
 import StateContext from "./context/StateContext";
 
-// import "react-tooltip/dist/react-tooltip.css";
-
 const themes = {
   dark: `${process.env.PUBLIC_URL}/dark-theme.css`,
   light: `${process.env.PUBLIC_URL}/light-theme.css`,
