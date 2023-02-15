@@ -70,7 +70,7 @@ const Battle = () => {
     };
 
     if (contract && gameData.activeBattle) getPlayerInfo();
-  }, [contract, gameData, battleName, battleStateChange]);
+  }, [contract, gameData, battleName, battleStateChange, writeContracts]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -85,7 +85,7 @@ const Battle = () => {
 
     try {
       // await contract.attackOrDefendChoice(choice, battleName, { gasLimit: 200000 });
-      await tx(writeContracts.AVAXGods.attackOrDefendChoice(choice, battleName, { gasLimit: 200000 }), update => {
+      await tx(writeContracts.AVAXGods.attackOrDefendChoice(choice, battleName, { gasLimit: 300000 }), update => {
         if (update && (update.status === "confirmed" || update.status === 1)) {
           setBattleStateChange(!battleStateChange);
           setShowAlert({
@@ -94,7 +94,7 @@ const Battle = () => {
             message: `Initiating ${choice === 1 ? "attack" : "defense"}`,
           });
         } else {
-          console.log(update);
+          console.log(update.message);
         }
       });
     } catch (error) {
