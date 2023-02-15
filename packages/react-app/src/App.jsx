@@ -2,7 +2,7 @@ import { Button, Col, Menu, Row } from "antd";
 import "antd/dist/antd.css";
 import { useContractReader } from "eth-hooks";
 
-import { Link, Route, Router, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import {
   Account,
@@ -88,7 +88,7 @@ function App(props) {
         </Menu.Item>
       </Menu>
 
-      <Router>
+      <Routes>
         <Route exact path="/">
           {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
           <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
@@ -162,7 +162,7 @@ function App(props) {
             mainnetProvider={mainnetProvider}
           />
         </Route>
-      </Router>
+      </Routes>
 
       <ThemeSwitch />
 

@@ -7,7 +7,7 @@ import { alertIcon, gameRules } from "../../assets";
 import styles from "../../styles";
 
 const GameInfo = () => {
-  const { contract, gameData, setErrorMessage, setShowAlert, tx, writeContracts } = useStateContext();
+  const { gameData, setErrorMessage, setShowAlert, tx, writeContracts } = useStateContext();
   const [toggleSidebar, setToggleSidebar] = useState(false);
   const navigate = useNavigate();
 

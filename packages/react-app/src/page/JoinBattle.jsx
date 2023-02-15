@@ -7,7 +7,17 @@ import { useStateContext } from "../context/StateContext";
 
 const JoinBattle = () => {
   const navigate = useNavigate();
-  const { tx, writeContracts, gameData, setShowAlert, setBattleName, setErrorMessage, address } = useStateContext();
+  const {
+    tx,
+    writeContracts,
+    gameData,
+    setShowAlert,
+    setBattleName,
+    setErrorMessage,
+    address,
+    isLoading,
+    setIsLoading,
+  } = useStateContext();
 
   useEffect(() => {
     if (gameData?.activeBattle?.battleStatus === 1) navigate(`/battle/${gameData.activeBattle.name}`);
@@ -15,12 +25,18 @@ const JoinBattle = () => {
 
   const handleClick = async battleName => {
     setBattleName(battleName);
+    setIsLoading(true);
 
     try {
       // await contract.joinBattle(battleName);
-      tx(writeContracts.AVAXGods.joinBattle(battleName));
-
-      setShowAlert({ status: true, type: "success", message: `Joining ${battleName}` });
+      tx(writeContracts.AVAXGods.joinBattle(battleName), update => {
+        if (update && (update.status === "confirmed" || update.status === 1)) {
+          setIsLoading(false);
+          setShowAlert({ status: true, type: "success", message: `Joining ${battleName}` });
+        } else {
+          setIsLoading(false);
+        }
+      });
     } catch (error) {
       setErrorMessage(error);
     }
@@ -39,7 +55,7 @@ const JoinBattle = () => {
                 <p className={styles.joinBattleTitle}>
                   {index + 1}. {battle.name}
                 </p>
-                <CustomButton title="Join" handleClick={() => handleClick(battle.name)} />
+                <CustomButton title="Join" handleClick={() => handleClick(battle.name)} isLoading={isLoading} />
               </div>
             ))
         ) : (

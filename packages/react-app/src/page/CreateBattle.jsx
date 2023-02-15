@@ -1,13 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import styles from '../styles';
+import styles from "../styles";
 
-import { CustomButton, CustomInput, GameLoad, PageHOC } from '../components/avaxgods';
-import { useStateContext } from '../context/StateContext';
+import { CustomButton, CustomInput, GameLoad, PageHOC } from "../components/avaxgods";
+import { useStateContext } from "../context/StateContext";
 
 const CreateBattle = () => {
-  const { tx, writeContracts, gameData, battleName, setBattleName, setErrorMessage } = useStateContext();
+  const {
+    tx,
+    writeContracts,
+
+    gameData,
+    battleName,
+    setBattleName,
+    setErrorMessage,
+    isLoading,
+    setIsLoading,
+  } = useStateContext();
   const [waitBattle, setWaitBattle] = useState(false);
   const navigate = useNavigate();
 
@@ -20,15 +30,28 @@ const CreateBattle = () => {
   }, [gameData]);
 
   const handleClick = async () => {
-    if (battleName === '' || battleName.trim() === '') return null;
+    setIsLoading(true);
+    if (battleName === "" || battleName.trim() === "") {
+      setIsLoading(false);
+      return;
+    }
 
     try {
       // await contract.createBattle(battleName);
-      await tx(writeContracts.AVAXGods.createBattle(battleName));
-
-      setWaitBattle(true);
+      await tx(writeContracts.AVAXGods.createBattle(battleName), update => {
+        console.log("📡 Transaction Update:", update);
+        if (update && (update.status === "confirmed" || update.status === 1)) {
+          console.log(" 🍾 Transaction " + update.hash + " finished!");
+          setWaitBattle(true);
+          setIsLoading(false);
+        } else {
+          setErrorMessage(update);
+          setIsLoading(false);
+        }
+      });
     } catch (error) {
       setErrorMessage(error);
+      setIsLoading(false);
     }
   };
 
@@ -43,9 +66,9 @@ const CreateBattle = () => {
           handleValueChange={setBattleName}
         />
 
-        <CustomButton title="Create Battle" handleClick={handleClick} restStyles="mt-6" />
+        <CustomButton title="Create Battle" handleClick={handleClick} restStyles="mt-6" isLoading={isLoading} />
       </div>
-      <p className={styles.infoText} onClick={() => navigate('/join-battle')}>
+      <p className={styles.infoText} onClick={() => navigate("/join-battle")}>
         Or join already existing battles
       </p>
     </>

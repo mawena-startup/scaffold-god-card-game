@@ -4,10 +4,9 @@ import React from "react";
 import { ThemeSwitcherProvider } from "react-css-theme-switcher";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ReactDOM from "react-dom";
-// import App from "./App";
 import { Home, CreateBattle, JoinBattle, Battle, Battleground } from "./page";
 import StateContext from "./context/StateContext";
-import { OnboardModal } from "./components/avaxgods";
+
 // import "react-tooltip/dist/react-tooltip.css";
 
 const themes = {
@@ -29,8 +28,6 @@ ReactDOM.render(
     <ThemeSwitcherProvider themeMap={themes} defaultTheme={prevTheme || "light"}>
       <BrowserRouter>
         <StateContext>
-          {/* <OnboardModal /> */}
-          {/* <App subgraphUri={subgraphUri} /> */}
           <Routes>
             <Route path="/" element={<Home />} />
             {/* <Route path="/test" element={<App subgraphUri={subgraphUri} />} /> */}

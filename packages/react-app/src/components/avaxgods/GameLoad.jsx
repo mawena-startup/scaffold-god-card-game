@@ -1,21 +1,20 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-import CustomButton from './CustomButton';
+import CustomButton from "./CustomButton";
 
-import { player01, player02 } from '../../assets';
-import styles from '../../styles';
-import { useStateContext } from '../../context/StateContext';
+import { player01, player02 } from "../../assets";
+import styles from "../../styles";
+import { useStateContext } from "../../context/StateContext";
 
 const GameLoad = () => {
   const { address } = useStateContext();
   const navigate = useNavigate();
-  console.log(typeof address);
 
   return (
     <div className={`${styles.flexBetween} ${styles.gameLoadContainer} `}>
       <div className={styles.gameLoadBtnBox}>
-        <CustomButton title="Choose Battleground" handleClick={() => navigate('/battleground')} restStyles="mt-6" />
+        <CustomButton title="Choose Battleground" handleClick={() => navigate("/battleground")} restStyles="mt-6" />
       </div>
 
       <div className={`flex-1 ${styles.flexCenter} flex-col`}>
@@ -41,7 +40,7 @@ const GameLoad = () => {
         <div className="mt-10">
           <p className={`${styles.infoText} text-center mb-5`}>OR</p>
 
-          <CustomButton title="Join other battles" handleClick={() => navigate('/join-battle')} />
+          <CustomButton title="Join other battles" handleClick={() => navigate("/join-battle")} />
         </div>
       </div>
     </div>

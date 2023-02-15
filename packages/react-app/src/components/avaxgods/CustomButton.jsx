@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import styles from '../../styles';
+import styles from "../../styles";
 
-const CustomButton = ({ title, handleClick, restStyles }) => (
-  <button type="button" className={`${styles.btn} ${restStyles}`} onClick={handleClick}>
-    {title}
+const CustomButton = ({ title, handleClick, restStyles, isLoading }) => (
+  <button type="button" disabled={isLoading} className={`${styles.btn} ${restStyles}`} onClick={handleClick}>
+    {isLoading ? "loading..." : title}
   </button>
 );
 

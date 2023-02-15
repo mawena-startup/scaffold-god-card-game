@@ -4,30 +4,50 @@ import { useStateContext } from "../context/StateContext";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const { contract, address, gameData, setShowAlert, setErrorMessage, readContracts, tx, writeContracts } =
-    useStateContext();
+  const {
+    contract,
+    writeContracts,
+    tx,
+    address,
+    gameData,
+    setShowAlert,
+    setErrorMessage,
+    battleStateChange,
+    isLoading,
+    setIsLoading,
+  } = useStateContext();
   const [playerName, setPlayerName] = useState("");
   const navigate = useNavigate();
 
   const handleClick = async () => {
+    setIsLoading(true);
     try {
       const playerExists = await contract.isPlayer(address);
 
       if (!playerExists) {
-        await contract.registerPlayer(playerName, playerName, { gasLimit: 500000 });
-
-        setShowAlert({
-          status: true,
-          type: "info",
-          message: `${playerName} is being summoned!`,
+        await tx(writeContracts.AVAXGods.registerPlayer(playerName, playerName, { gasLimit: 500000 }), update => {
+          if (update && (update.status === "confirmed" || update.status === 1)) {
+            setShowAlert({
+              status: true,
+              type: "info",
+              message: `${playerName} is being summoned!`,
+            });
+            setIsLoading(false);
+            setTimeout(() => {
+              navigate("/create-battle");
+            }, 5000);
+          } else {
+            setErrorMessage(update);
+            setShowAlert({
+              status: true,
+              type: "failure",
+              message: update?.message,
+            });
+            setIsLoading(false);
+          }
         });
-
-        setTimeout(() => navigate("/create-battle"), 8000);
       }
-      // await tx(writeContracts.AVAXGods.registerPlayer(playerName, playerName, { gasLimit: 500000 }));
-      // navigate('/create-battle');
     } catch (error) {
-      console.log(error);
       setErrorMessage(error);
 
       setShowAlert({
@@ -35,6 +55,7 @@ const Home = () => {
         type: "failure",
         message: "something went wrong",
       });
+      setIsLoading(false);
     }
   };
 
@@ -47,7 +68,7 @@ const Home = () => {
     };
 
     if (contract) createPlayerToken();
-  }, [contract]);
+  }, [contract, battleStateChange]);
 
   useEffect(() => {
     if (gameData.activeBattle) {
@@ -66,7 +87,9 @@ const Home = () => {
             handleValueChange={setPlayerName}
           />
 
-          <CustomButton title="Register" handleClick={handleClick} restStyles="mt-6" />
+          {address && (
+            <CustomButton title="Register" handleClick={handleClick} restStyles="mt-6" isLoading={isLoading} />
+          )}
         </div>
       )}
     </>
@@ -76,7 +99,7 @@ const Home = () => {
 export default PageHOC(
   Home,
   <>
-    Welcome to Avax Gods <br /> a Web3 NFT Card Game
+    Welcome to Scaffold Gods <br /> a Web3 NFT Card Game
   </>,
   <>
     Connect your wallet to start playing <br /> the ultimate Web3 Battle Card Game

@@ -92,7 +92,7 @@ export default function Account({
     <div className="inline-flex items-center justify-center">
       {web3Modal && web3Modal.cachedProvider ? (
         <>
-          {address && <Address address={address} ensProvider={mainnetProvider} blockExplorer={blockExplorer} />}
+          {/* {address && <Address address={address} ensProvider={mainnetProvider} blockExplorer={blockExplorer} />} */}
           <Balance address={address} provider={localProvider} price={price} />
           <Wallet
             address={address}
@@ -107,7 +107,7 @@ export default function Account({
         ""
       ) : isContract ? (
         <>
-          {address && <Address address={address} ensProvider={mainnetProvider} blockExplorer={blockExplorer} />}
+          {/* {address && <Address address={address} ensProvider={mainnetProvider} blockExplorer={blockExplorer} />} */}
           <Balance address={address} provider={localProvider} price={price} />
         </>
       ) : (
@@ -115,7 +115,7 @@ export default function Account({
       )}
       {useBurner && web3Modal && !web3Modal.cachedProvider ? (
         <>
-          <Address address={address} ensProvider={mainnetProvider} blockExplorer={blockExplorer} />
+          {/* <Address address={address} ensProvider={mainnetProvider} blockExplorer={blockExplorer} /> */}
           <Balance address={address} provider={localProvider} price={price} />
           <Wallet
             address={address}

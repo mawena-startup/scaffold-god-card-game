@@ -20,7 +20,7 @@ import { useStaticJsonRPC } from "../hooks";
 // custome import
 import { GetParams } from "../utils/onboard.js";
 import { useEventListener } from "eth-hooks/events/useEventListener";
-import { createEventListeners, createNewPlayerEventListener } from "./createEventListeners";
+import { createEventListeners } from "./createEventListeners";
 import { playAudio, sparcle } from "../utils/animation.js";
 import { defenseSound } from "../assets";
 
@@ -72,7 +72,6 @@ const StateContext = ({ children }) => {
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
   const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[0]);
-  const [signer, setSigner] = useState();
 
   //custom context
 
@@ -86,10 +85,10 @@ const StateContext = ({ children }) => {
   const [updateGameData, setUpdateGameData] = useState(0);
   const [checkNewPlayer, setCheckNewPlayer] = useState(false);
   const [checkNewBattle, setCheckNewBattle] = useState(false);
-  const [checkBattleMove, setCheckBattleMove] = useState(false);
   const [checkBattleEnded, setCheckBattleEnded] = useState(false);
   const [checkRoundEnded, setCheckRoundEnded] = useState(false);
-
+  const [battleStateChange, setBattleStateChange] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const player1Ref = useRef();
   const player2Ref = useRef();
 
@@ -271,7 +270,7 @@ const StateContext = ({ children }) => {
   }
 
   const newRoundEndedEvent = useEventListener(readContracts, "AVAXGods", "RoundEnded", injectedProvider, 1);
-  console.log(newRoundEndedEvent[0]?.args, "battle rounded");
+
   if (newRoundEndedEvent[0]?.args && !checkRoundEnded) {
     for (let i = 0; i < newRoundEndedEvent[0]?.args.damagedPlayers.length; i += 1) {
       if (newRoundEndedEvent[0]?.args.damagedPlayers[i] !== emptyAccount) {
@@ -358,7 +357,7 @@ const StateContext = ({ children }) => {
     };
 
     fetchGameData();
-  }, [contract, updateGameData]);
+  }, [contract, updateGameData, battleStateChange]);
 
   // Then read your DAI balance like:
   const myMainnetDAIBalance = useContractReader(mainnetContracts, "DAI", "balanceOf", [
@@ -393,6 +392,7 @@ const StateContext = ({ children }) => {
       // console.log('💵 yourMainnetDAIBalance', myMainnetDAIBalance);
       // console.log('🔐 writeContracts', writeContracts);
     }
+    setBattleStateChange(!battleStateChange);
   }, [
     mainnetProvider,
     address,
@@ -404,6 +404,7 @@ const StateContext = ({ children }) => {
     mainnetContracts,
     localChainId,
     myMainnetDAIBalance,
+    contract,
   ]);
 
   //* Activate event listeners for the smart contract
@@ -433,6 +434,7 @@ const StateContext = ({ children }) => {
     mainnetContracts,
     localChainId,
     myMainnetDAIBalance,
+    battleStateChange,
   ]);
 
   const loadWeb3Modal = useCallback(async () => {
@@ -526,6 +528,10 @@ const StateContext = ({ children }) => {
         contract,
         player1Ref,
         player2Ref,
+        battleStateChange,
+        setBattleStateChange,
+        isLoading,
+        setIsLoading,
       }}
     >
       {children}

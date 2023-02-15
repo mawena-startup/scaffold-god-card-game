@@ -4,7 +4,6 @@ import { useStateContext } from "../../context/StateContext";
 import Alert from "./Alert";
 import NetworkSwitch from "../NetworkSwitch";
 import Account from "../Account";
-const { ethers } = require("ethers");
 
 const Navbar = () => {
   const {

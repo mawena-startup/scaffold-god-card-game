@@ -29,6 +29,8 @@ const Battle = () => {
     setShowAlert,
     player1Ref,
     player2Ref,
+    battleStateChange,
+    setBattleStateChange,
   } = useStateContext();
   const [player2, setPlayer2] = useState({});
   const [player1, setPlayer1] = useState({});
@@ -68,7 +70,7 @@ const Battle = () => {
     };
 
     if (contract && gameData.activeBattle) getPlayerInfo();
-  }, [contract, gameData, battleName]);
+  }, [contract, gameData, battleName, battleStateChange]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -82,13 +84,18 @@ const Battle = () => {
     playAudio(choice === 1 ? attackSound : defenseSound);
 
     try {
-      await contract.attackOrDefendChoice(choice, battleName, { gasLimit: 200000 });
-      // await tx(writeContracts.AVAXGods.attackOrDefendChoice(choice, battleName, { gasLimit: 200000 }));
-
-      setShowAlert({
-        status: true,
-        type: "info",
-        message: `Initiating ${choice === 1 ? "attack" : "defense"}`,
+      // await contract.attackOrDefendChoice(choice, battleName, { gasLimit: 200000 });
+      await tx(writeContracts.AVAXGods.attackOrDefendChoice(choice, battleName, { gasLimit: 200000 }), update => {
+        if (update && (update.status === "confirmed" || update.status === 1)) {
+          setBattleStateChange(!battleStateChange);
+          setShowAlert({
+            status: true,
+            type: "info",
+            message: `Initiating ${choice === 1 ? "attack" : "defense"}`,
+          });
+        } else {
+          console.log(update);
+        }
       });
     } catch (error) {
       setErrorMessage(error);
