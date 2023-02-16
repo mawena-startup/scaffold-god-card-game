@@ -6,14 +6,14 @@ import '@openzeppelin/contracts/token/ERC1155/ERC1155.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol';
 
-/// @title AVAXGods
-/// @notice This contract handles the token management and battle logic for the AVAXGods game
+/// @title ScaffoldGods
+/// @notice This contract handles the token management and battle logic for the ScaffoldGods game
 /// @notice Version 1.0.0
 /// @author Kcpele
 /// @author Koko codes
 
 
-contract AVAXGods is ERC1155, Ownable, ERC1155Supply {
+contract ScaffoldGods is ERC1155, Ownable, ERC1155Supply {
   string public baseURI; // baseURI where token metadata is stored
   uint256 public totalSupply; // Total number of tokens minted
   uint256 public constant DEVIL = 0;

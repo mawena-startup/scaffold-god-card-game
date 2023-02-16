@@ -33,7 +33,7 @@ const Navbar = () => {
         className="bg-white backdrop-filter backdrop-blur-lg bg-opacity-10"
         style={{ position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}
       >
-        <div className="text-white flex gap-3">
+        <div className="text-white  flex items-center justify-center gap-3">
           <div>
             {USE_NETWORK_SELECTOR && (
               <div>

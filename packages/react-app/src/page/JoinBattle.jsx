@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { CustomButton, PageHOC } from "../components/avaxgods";
+import { CustomButton, PageHOC } from "../components/scaffoldgods";
 import styles from "../styles";
 import { useStateContext } from "../context/StateContext";
 
@@ -29,7 +29,7 @@ const JoinBattle = () => {
 
     try {
       // await contract.joinBattle(battleName);
-      tx(writeContracts.AVAXGods.joinBattle(battleName), update => {
+      tx(writeContracts.ScaffoldGods.joinBattle(battleName), update => {
         if (update && (update.status === "confirmed" || update.status === 1)) {
           setIsLoading(false);
           setShowAlert({ status: true, type: "success", message: `Joining ${battleName}` });

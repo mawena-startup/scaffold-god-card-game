@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import styles from "../styles";
-import { ActionButton, Alert, Card, GameInfo, PlayerInfo } from "../components/avaxgods";
+import { ActionButton, Alert, Card, GameInfo, PlayerInfo } from "../components/scaffoldgods";
 
 import {
   attack,
@@ -85,7 +85,7 @@ const Battle = () => {
 
     try {
       // await contract.attackOrDefendChoice(choice, battleName, { gasLimit: 200000 });
-      await tx(writeContracts.AVAXGods.attackOrDefendChoice(choice, battleName, { gasLimit: 300000 }), update => {
+      await tx(writeContracts.ScaffoldGods.attackOrDefendChoice(choice, battleName, { gasLimit: 300000 }), update => {
         if (update && (update.status === "confirmed" || update.status === 1)) {
           setBattleStateChange(!battleStateChange);
           setShowAlert({

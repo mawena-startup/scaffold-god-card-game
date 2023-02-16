@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CustomButton, CustomInput, PageHOC } from "../components/avaxgods";
+import { CustomButton, CustomInput, PageHOC } from "../components/scaffoldgods";
 import { useStateContext } from "../context/StateContext";
 import { useNavigate } from "react-router-dom";
 
@@ -25,7 +25,7 @@ const Home = () => {
       const playerExists = await contract.isPlayer(address);
 
       if (!playerExists) {
-        await tx(writeContracts.AVAXGods.registerPlayer(playerName, playerName, { gasLimit: 500000 }), update => {
+        await tx(writeContracts.ScaffoldGods.registerPlayer(playerName, playerName, { gasLimit: 500000 }), update => {
           if (update && (update.status === "confirmed" || update.status === 1)) {
             setShowAlert({
               status: true,
