@@ -342,7 +342,8 @@ const StateContext = ({ children }) => {
         const pendingBattles = fetchedBattles?.filter(battle => battle.battleStatus === 0);
         let activeBattle = null;
 
-        if (fetchedBattles) {
+        if (fetchedBattles.length > 1) {
+          console.log("fetch battle", fetchedBattles, "length", fetchedBattles.length);
           fetchedBattles?.forEach(battle => {
             if (battle.players.find(player => player.toLowerCase() === address.toLowerCase())) {
               if (battle.winner.startsWith("0x00")) {
