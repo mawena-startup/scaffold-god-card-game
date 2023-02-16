@@ -1,13 +1,16 @@
 module.exports = {
   // purge: [], enable purge for production builds
   darkMode: false, // or 'media' or 'class'
+  purge: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+
   theme: {
     extend: {
       colors: {
-        siteblack: '#131519',
-        siteDimBlack: '#191d23',
-        siteViolet: '#7f46f0',
-        siteWhite: '#9eacc7',
+        siteblack: "#131519",
+        siteDimBlack: "#191d23",
+        siteViolet: "#7f46f0",
+        siteWhite: "#9eacc7",
       },
       backgroundImage: {
         astral: "url('/src/assets/background/astral.jpg')",
@@ -18,7 +21,7 @@ module.exports = {
         landing: "url('/src/assets/background/landing.jpg')",
       },
       fontFamily: {
-        rajdhani: ['Rajdhani', 'sans-serif'],
+        rajdhani: ["Rajdhani", "sans-serif"],
       },
     },
   },
