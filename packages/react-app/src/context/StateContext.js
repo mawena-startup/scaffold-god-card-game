@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { NETWORKS, ALCHEMY_KEY } from "../constants";
 import externalContracts from "../contracts/external_contracts";
 // contracts
-import deployedContracts from "../contracts/hardhat_contracts.json";
+import deployedContracts from "./hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "../helpers";
 
 import { useStaticJsonRPC } from "../hooks";
@@ -192,6 +192,23 @@ const StateContext = ({ children }) => {
     getAddress();
   }, [userSigner]);
 
+  //* Set the contract that can be used to interact with the smart
+  useEffect(() => {
+    const setSmartContractAndProvider = async () => {
+      if (userSigner) {
+        const newContract = new ethers.Contract(
+          deployedContracts[targetNetwork.chainId].goerli.contracts.ScaffoldGods.address,
+          deployedContracts[targetNetwork.chainId].goerli.contracts.ScaffoldGods.abi,
+          userSigner,
+        );
+
+        setContract(newContract);
+      }
+    };
+
+    setSmartContractAndProvider();
+  }, [address, selectedNetwork, localProvider, userSigner, targetNetwork]);
+
   // You can warn the user if you would like them to be on a specific network
   const localChainId = localProvider && localProvider._network && localProvider._network.chainId;
   const selectedChainId =
@@ -222,23 +239,6 @@ const StateContext = ({ children }) => {
   //
   // If you want to bring in the mainnet DAI contract it would look like:
   const mainnetContracts = useContractLoader(mainnetProvider, contractConfig);
-
-  //* Set the contract that can be used to interact with the smart
-  useEffect(() => {
-    const setSmartContractAndProvider = async () => {
-      if (userSigner) {
-        const newContract = new ethers.Contract(
-          contractConfig.deployedContracts[targetNetwork.chainId].goerli.contracts.ScaffoldGods.address,
-          contractConfig.deployedContracts[targetNetwork.chainId].goerli.contracts.ScaffoldGods.abi,
-          userSigner,
-        );
-
-        setContract(newContract);
-      }
-    };
-
-    setSmartContractAndProvider();
-  }, [address, selectedNetwork, localProvider, userSigner, targetNetwork, contractConfig]);
 
   //* Get battle card coordinates
   const getCoords = cardRef => {
