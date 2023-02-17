@@ -24,11 +24,13 @@
 
     <!-- Tailwind CSS CDN for faster local development -->
     <link rel="stylesheet" href="%PUBLIC_URL%/index.css" />
-    <% if (process.env.NODE_ENV === 'development') { %>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         darkMode: "class",
+        purge: ["./src/**/*.{js,jsx,ts,tsx}"],
+        content: ["./src/**/*.{js,jsx,ts,tsx}"],
         theme: {
           extend: {
             colors: {
@@ -52,8 +54,8 @@
         },
       };
     </script>
-    <% } %>
-    <title>Ethereum App</title>
+
+    <title>ScaffoldGods</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
