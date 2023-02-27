@@ -104,19 +104,19 @@ const StateContext = ({ children }) => {
     }
   }, []);
 
-  //* Reset web3 onboarding modal params
-  // useEffect(() => {
-  //   const resetParams = async () => {
-  //     const currentStep = await GetParams();
+  // * Reset web3 onboarding modal params
+  useEffect(() => {
+    const resetParams = async () => {
+      const currentStep = await GetParams();
 
-  //     setStep(currentStep.step);
-  //   };
+      setStep(currentStep.step);
+    };
 
-  //   resetParams();
+    resetParams();
 
-  //   window?.ethereum?.on('chainChanged', () => resetParams());
-  //   window?.ethereum?.on('accountsChanged', () => resetParams());
-  // }, []);
+    window?.ethereum?.on("chainChanged", () => resetParams());
+    window?.ethereum?.on("accountsChanged", () => resetParams());
+  }, []);
 
   //* Handle alerts
   useEffect(() => {
@@ -224,96 +224,88 @@ const StateContext = ({ children }) => {
   const mainnetContracts = useContractLoader(mainnetProvider, contractConfig);
 
   //* Get battle card coordinates
-  const getCoords = cardRef => {
-    const { left, top, width, height } = cardRef.current.getBoundingClientRect();
+  // const getCoords = cardRef => {
+  //   const { left, top, width, height } = cardRef.current.getBoundingClientRect();
+  //   console.log(cardRef.current);
+  //   return {
+  //     pageX: left + width / 2,
+  //     pageY: top + height / 2.25,
+  //   };
+  // };
 
-    return {
-      pageX: left + width / 2,
-      pageY: top + height / 2.25,
-    };
-  };
+  // const emptyAccount = "0x0000000000000000000000000000000000000000";
 
-  const emptyAccount = "0x0000000000000000000000000000000000000000";
-
-  // 📟 Listen for broadcast events
-  const newPlayerEvents = useEventListener(readContracts, "AVAXGods", "NewPlayer", injectedProvider, 1);
-  if (newPlayerEvents[0]?.args[0] && !checkNewPlayer) {
-    if (address === newPlayerEvents[0]?.args[0]) {
-      setShowAlert({
-        status: true,
-        type: "success",
-        message: "Player has been successfully registered",
-      });
-    }
-    setCheckNewPlayer(true);
-    console.log(newPlayerEvents[0]?.args?.owner, "calling the new player event from state context");
-  }
-
-  //new battle event check here
-  const newBattleEvents = useEventListener(readContracts, "AVAXGods", "NewBattle", injectedProvider, 1);
-  if (newBattleEvents[0]?.args && !checkNewBattle && address) {
-    if (
-      address.toLowerCase() === newBattleEvents[0]?.args.player1.toLowerCase() ||
-      address.toLowerCase() === newBattleEvents[0]?.args.player2.toLowerCase()
-    ) {
-      navigate(`/battle/${newBattleEvents[0]?.args.battleName}`);
-    }
-
-    setUpdateGameData(prevUpdateGameData => prevUpdateGameData + 1);
-    setCheckNewBattle(true);
-    console.log(newBattleEvents[0]?.args, "calling the new battle event from state context");
-  }
-
-  const newBattleEventMove = useEventListener(readContracts, "AVAXGods", "BattleMove", injectedProvider, 1);
-  if (newBattleEventMove[0]?.args) {
-    console.log(newBattleEventMove[0]?.args, " battle move event from state context");
-  }
-
-  const newRoundEndedEvent = useEventListener(readContracts, "AVAXGods", "RoundEnded", injectedProvider, 1);
-
-  if (newRoundEndedEvent[0]?.args && !checkRoundEnded) {
-    for (let i = 0; i < newRoundEndedEvent[0]?.args.damagedPlayers.length; i += 1) {
-      if (newRoundEndedEvent[0]?.args.damagedPlayers[i] !== emptyAccount) {
-        if (newRoundEndedEvent[0]?.args.damagedPlayers[i] === address) {
-          sparcle(getCoords(player1Ref));
-        } else if (newRoundEndedEvent[0]?.args.damagedPlayers[i] !== address) {
-          sparcle(getCoords(player2Ref));
-        }
-      } else {
-        playAudio(defenseSound);
-      }
-    }
-
-    setUpdateGameData(prevUpdateGameData => prevUpdateGameData + 1);
-
-    setCheckRoundEnded(true);
-    console.log(newRoundEndedEvent[0]?.args, " round ended from state context");
-  }
-
-  const newBattleEventEnded = useEventListener(readContracts, "AVAXGods", "BattleEnded", injectedProvider, 1);
-  // console.log(newBattleEventEnded[0]?.args, "battle ended");
-  if (newBattleEventEnded[0]?.args && !checkBattleEnded) {
-    console.log(newBattleEventEnded[0]?.args, " battle ended from state context");
-    if (address.toLowerCase() === newBattleEventEnded[0]?.args.winner.toLowerCase()) {
-      setShowAlert({ status: true, type: "success", message: "You won!" });
-    } else if (address.toLowerCase() === newBattleEventEnded[0]?.args.loser.toLowerCase()) {
-      setShowAlert({ status: true, type: "failure", message: "You lost!" });
-    }
-
-    navigate("/create-battle");
-    setCheckBattleEnded(true);
-  }
-
-  //handling every envent
-  // useEffect(() => {
-  //   if (newBattleEvents.length > 0) {
-
+  // // 📟 Listen for broadcast events
+  // const newPlayerEvents = useEventListener(readContracts, "AVAXGods", "NewPlayer", injectedProvider, 1);
+  // if (newPlayerEvents[0]?.args[0] && !checkNewPlayer) {
+  //   if (address === newPlayerEvents[0]?.args[0]) {
+  //     setShowAlert({
+  //       status: true,
+  //       type: "success",
+  //       message: "Player has been successfully registered",
+  //     });
   //   }
-  // }, [newBattleEvents]);
-  // If you want to call a function on a new block
-  // useOnBlock(mainnetProvider, () => {
-  //   console.log(`⛓ A new mainnet block is here: ${mainnetProvider._lastBlockNumber}`);
-  // });
+  //   setCheckNewPlayer(true);
+  //   console.log(newPlayerEvents[0]?.args?.owner, "calling the new player event from state context");
+  // }
+
+  // //new battle event check here
+  // const newBattleEvents = useEventListener(readContracts, "AVAXGods", "NewBattle", injectedProvider, 1);
+  // if (newBattleEvents[0]?.args && !checkNewBattle && address) {
+  //   if (
+  //     address.toLowerCase() === newBattleEvents[0]?.args.player1.toLowerCase() ||
+  //     address.toLowerCase() === newBattleEvents[0]?.args.player2.toLowerCase()
+  //   ) {
+  //     navigate(`/battle/${newBattleEvents[0]?.args.battleName}`);
+  //   }
+
+  //   setUpdateGameData(prevUpdateGameData => prevUpdateGameData + 1);
+  //   setCheckNewBattle(true);
+  //   console.log(newBattleEvents[0]?.args, "calling the new battle event from state context");
+  // }
+
+  // const newBattleEventMove = useEventListener(readContracts, "AVAXGods", "BattleMove", injectedProvider, 1);
+  // if (newBattleEventMove[0]?.args) {
+  //   console.log(newBattleEventMove[0]?.args, " battle move event from state context");
+  // }
+
+  // const newRoundEndedEvent = useEventListener(readContracts, "AVAXGods", "RoundEnded", injectedProvider, 1);
+
+  // if (newRoundEndedEvent[0]?.args && !checkRoundEnded) {
+  //   for (let i = 0; i < newRoundEndedEvent[0]?.args.damagedPlayers.length; i += 1) {
+  //     if (newRoundEndedEvent[0]?.args.damagedPlayers[i] !== emptyAccount) {
+  //       if (newRoundEndedEvent[0]?.args.damagedPlayers[i] === address) {
+  //         sparcle(getCoords(player1Ref));
+  //       } else if (newRoundEndedEvent[0]?.args.damagedPlayers[i] !== address) {
+  //         sparcle(getCoords(player2Ref));
+  //       }
+  //     } else {
+  //       playAudio(defenseSound);
+  //     }
+  //   }
+
+  //   setUpdateGameData(prevUpdateGameData => prevUpdateGameData + 1);
+
+  //   setCheckRoundEnded(true);
+  //   console.log(newRoundEndedEvent[0]?.args, " round ended from state context");
+  // }
+
+  // const newBattleEventEnded = useEventListener(readContracts, "AVAXGods", "BattleEnded", injectedProvider, 1);
+  // // console.log(newBattleEventEnded[0]?.args, "battle ended");
+  // if (newBattleEventEnded[0]?.args) {
+  //   console.log(newBattleEventEnded[0]?.args, " battle ended from state context");
+  //   if (address.toLowerCase() === newBattleEventEnded[0]?.args.winner.toLowerCase()) {
+  //     setShowAlert({ status: true, type: "success", message: "You won!" });
+  //     navigate("/create-battle");
+  //   } else if (address.toLowerCase() === newBattleEventEnded[0]?.args.loser.toLowerCase()) {
+  //     setShowAlert({ status: true, type: "failure", message: "You lost!" });
+  //     navigate("/create-battle");
+  //   }
+  //   setCheckBattleEnded(false);
+  //   setCheckNewBattle(false);
+  //   setCheckRoundEnded(false);
+  //   // setCheckBattleEnded(true);
+  // }
 
   //* Set the contract that can be used to interact with the smart
   useEffect(() => {
@@ -358,6 +350,25 @@ const StateContext = ({ children }) => {
 
     fetchGameData();
   }, [contract, updateGameData, battleStateChange]);
+
+  //* Activate event listeners for the smart contract
+  useEffect(() => {
+    let provider = injectedProvider;
+    console.log(provider, "form event listener");
+    if (step === -1 && contract) {
+      createEventListeners({
+        navigate,
+        contract,
+        provider,
+        address,
+        setShowAlert,
+        player1Ref,
+        player2Ref,
+        setUpdateGameData,
+      });
+      console.log("listener for event");
+    }
+  }, [step]);
 
   // Then read your DAI balance like:
   const myMainnetDAIBalance = useContractReader(mainnetContracts, "DAI", "balanceOf", [
@@ -405,36 +416,6 @@ const StateContext = ({ children }) => {
     localChainId,
     myMainnetDAIBalance,
     contract,
-  ]);
-
-  //* Activate event listeners for the smart contract
-  useEffect(() => {
-    if (step === -1 && contract) {
-      createEventListeners({
-        navigate,
-        contract,
-        injectedProvider,
-        address,
-        setShowAlert,
-        player1Ref,
-        player2Ref,
-        setUpdateGameData,
-      });
-    }
-  }, [
-    step,
-    contract,
-    mainnetProvider,
-    address,
-    selectedChainId,
-    yourLocalBalance,
-    yourMainnetBalance,
-    readContracts,
-    writeContracts,
-    mainnetContracts,
-    localChainId,
-    myMainnetDAIBalance,
-    battleStateChange,
   ]);
 
   const loadWeb3Modal = useCallback(async () => {
