@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { CustomButton, PageHOC } from "../components/avaxgods";
+import { CustomButton, PageHOC } from "../components/scaffoldGods";
 import styles from "../styles";
 import { useStateContext } from "../context/StateContext";
 
@@ -17,11 +17,12 @@ const JoinBattle = () => {
     address,
     isLoading,
     setIsLoading,
+    battleStateChange,
   } = useStateContext();
 
   useEffect(() => {
     if (gameData?.activeBattle?.battleStatus === 1) navigate(`/battle/${gameData.activeBattle.name}`);
-  }, [gameData]);
+  }, [gameData, battleStateChange]);
 
   const handleClick = async battleName => {
     setBattleName(battleName);
@@ -29,7 +30,7 @@ const JoinBattle = () => {
 
     try {
       // await contract.joinBattle(battleName);
-      tx(writeContracts.AVAXGods.joinBattle(battleName), update => {
+      tx(writeContracts.ScaffoldGods.joinBattle(battleName), update => {
         if (update && (update.status === "confirmed" || update.status === 1)) {
           setIsLoading(false);
           setShowAlert({ status: true, type: "success", message: `Joining ${battleName}` });

@@ -10,7 +10,7 @@ const AddNewEvent = (eventFilter, provider, cb) => {
 
   provider.on(eventFilter, logs => {
     const parsedLog = new ethers.utils.Interface(
-      deployedContracts[NETWORKS.localhost.chainId].localhost.contracts.AVAXGods.abi,
+      deployedContracts[NETWORKS.localhost.chainId].localhost.contracts.ScaffoldGods.abi,
     ).parseLog(logs);
 
     cb(parsedLog);

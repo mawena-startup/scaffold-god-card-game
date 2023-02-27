@@ -19,10 +19,7 @@ import { useStaticJsonRPC } from "../hooks";
 
 // custome import
 import { GetParams } from "../utils/onboard.js";
-import { useEventListener } from "eth-hooks/events/useEventListener";
 import { createEventListeners } from "./createEventListeners";
-import { playAudio, sparcle } from "../utils/animation.js";
-import { defenseSound } from "../assets";
 
 const { ethers } = require("ethers");
 
@@ -49,7 +46,7 @@ const { ethers } = require("ethers");
 const initialNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, goerli, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
-const DEBUG = true;
+const DEBUG = false;
 const NETWORKCHECK = true;
 const USE_BURNER_WALLET = true; // toggle burner wallet feature
 const USE_NETWORK_SELECTOR = false;
@@ -82,11 +79,8 @@ const StateContext = ({ children }) => {
   const [battleName, setBattleName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [contract, setContract] = useState(null);
+  const [initiateEventListeners, setInitiateEventListeners] = useState(false);
   const [updateGameData, setUpdateGameData] = useState(0);
-  const [checkNewPlayer, setCheckNewPlayer] = useState(false);
-  const [checkNewBattle, setCheckNewBattle] = useState(false);
-  const [checkBattleEnded, setCheckBattleEnded] = useState(false);
-  const [checkRoundEnded, setCheckRoundEnded] = useState(false);
   const [battleStateChange, setBattleStateChange] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const player1Ref = useRef();
@@ -223,97 +217,12 @@ const StateContext = ({ children }) => {
   // If you want to bring in the mainnet DAI contract it would look like:
   const mainnetContracts = useContractLoader(mainnetProvider, contractConfig);
 
-  //* Get battle card coordinates
-  // const getCoords = cardRef => {
-  //   const { left, top, width, height } = cardRef.current.getBoundingClientRect();
-  //   console.log(cardRef.current);
-  //   return {
-  //     pageX: left + width / 2,
-  //     pageY: top + height / 2.25,
-  //   };
-  // };
-
-  // const emptyAccount = "0x0000000000000000000000000000000000000000";
-
-  // // 📟 Listen for broadcast events
-  // const newPlayerEvents = useEventListener(readContracts, "AVAXGods", "NewPlayer", injectedProvider, 1);
-  // if (newPlayerEvents[0]?.args[0] && !checkNewPlayer) {
-  //   if (address === newPlayerEvents[0]?.args[0]) {
-  //     setShowAlert({
-  //       status: true,
-  //       type: "success",
-  //       message: "Player has been successfully registered",
-  //     });
-  //   }
-  //   setCheckNewPlayer(true);
-  //   console.log(newPlayerEvents[0]?.args?.owner, "calling the new player event from state context");
-  // }
-
-  // //new battle event check here
-  // const newBattleEvents = useEventListener(readContracts, "AVAXGods", "NewBattle", injectedProvider, 1);
-  // if (newBattleEvents[0]?.args && !checkNewBattle && address) {
-  //   if (
-  //     address.toLowerCase() === newBattleEvents[0]?.args.player1.toLowerCase() ||
-  //     address.toLowerCase() === newBattleEvents[0]?.args.player2.toLowerCase()
-  //   ) {
-  //     navigate(`/battle/${newBattleEvents[0]?.args.battleName}`);
-  //   }
-
-  //   setUpdateGameData(prevUpdateGameData => prevUpdateGameData + 1);
-  //   setCheckNewBattle(true);
-  //   console.log(newBattleEvents[0]?.args, "calling the new battle event from state context");
-  // }
-
-  // const newBattleEventMove = useEventListener(readContracts, "AVAXGods", "BattleMove", injectedProvider, 1);
-  // if (newBattleEventMove[0]?.args) {
-  //   console.log(newBattleEventMove[0]?.args, " battle move event from state context");
-  // }
-
-  // const newRoundEndedEvent = useEventListener(readContracts, "AVAXGods", "RoundEnded", injectedProvider, 1);
-
-  // if (newRoundEndedEvent[0]?.args && !checkRoundEnded) {
-  //   for (let i = 0; i < newRoundEndedEvent[0]?.args.damagedPlayers.length; i += 1) {
-  //     if (newRoundEndedEvent[0]?.args.damagedPlayers[i] !== emptyAccount) {
-  //       if (newRoundEndedEvent[0]?.args.damagedPlayers[i] === address) {
-  //         sparcle(getCoords(player1Ref));
-  //       } else if (newRoundEndedEvent[0]?.args.damagedPlayers[i] !== address) {
-  //         sparcle(getCoords(player2Ref));
-  //       }
-  //     } else {
-  //       playAudio(defenseSound);
-  //     }
-  //   }
-
-  //   setUpdateGameData(prevUpdateGameData => prevUpdateGameData + 1);
-
-  //   setCheckRoundEnded(true);
-  //   console.log(newRoundEndedEvent[0]?.args, " round ended from state context");
-  // }
-
-  // const newBattleEventEnded = useEventListener(readContracts, "AVAXGods", "BattleEnded", injectedProvider, 1);
-  // // console.log(newBattleEventEnded[0]?.args, "battle ended");
-  // if (newBattleEventEnded[0]?.args) {
-  //   console.log(newBattleEventEnded[0]?.args, " battle ended from state context");
-  //   if (address.toLowerCase() === newBattleEventEnded[0]?.args.winner.toLowerCase()) {
-  //     setShowAlert({ status: true, type: "success", message: "You won!" });
-  //     navigate("/create-battle");
-  //   } else if (address.toLowerCase() === newBattleEventEnded[0]?.args.loser.toLowerCase()) {
-  //     setShowAlert({ status: true, type: "failure", message: "You lost!" });
-  //     navigate("/create-battle");
-  //   }
-  //   setCheckBattleEnded(false);
-  //   setCheckNewBattle(false);
-  //   setCheckRoundEnded(false);
-  //   // setCheckBattleEnded(true);
-  // }
-
-  //* Set the contract that can be used to interact with the smart
   useEffect(() => {
     const setSmartContractAndProvider = async () => {
       if (userSigner) {
         const newContract = new ethers.Contract(
-          contractConfig.deployedContracts[targetNetwork.chainId].localhost.contracts.AVAXGods.address,
-          contractConfig.deployedContracts[targetNetwork.chainId].localhost.contracts.AVAXGods.abi,
+          contractConfig.deployedContracts[targetNetwork.chainId].localhost.contracts.ScaffoldGods.address,
+          contractConfig.deployedContracts[targetNetwork.chainId].localhost.contracts.ScaffoldGods.abi,
           userSigner,
         );
 
@@ -325,7 +234,7 @@ const StateContext = ({ children }) => {
   }, [address]);
 
   //* Set the game data to the state
-  // const fetchedAllBattles = useContractReader(readContracts, 'AVAXGods', 'getAllBattles');
+  // const fetchedAllBattles = useContractReader(readContracts, 'ScaffoldGods', 'getAllBattles');
   // console.log('all battles', fetchedAllBattles);
   useEffect(() => {
     const fetchGameData = async () => {
@@ -351,25 +260,6 @@ const StateContext = ({ children }) => {
     fetchGameData();
   }, [contract, updateGameData, battleStateChange]);
 
-  //* Activate event listeners for the smart contract
-  useEffect(() => {
-    let provider = injectedProvider;
-    console.log(provider, "form event listener");
-    if (step === -1 && contract) {
-      createEventListeners({
-        navigate,
-        contract,
-        provider,
-        address,
-        setShowAlert,
-        player1Ref,
-        player2Ref,
-        setUpdateGameData,
-      });
-      console.log("listener for event");
-    }
-  }, [step]);
-
   // Then read your DAI balance like:
   const myMainnetDAIBalance = useContractReader(mainnetContracts, "DAI", "balanceOf", [
     "0x34aA3F359A9D614239015126635CE7732c18fDF3",
@@ -379,29 +269,23 @@ const StateContext = ({ children }) => {
   // 🧫 DEBUG 👨🏻‍🔬
   //
   useEffect(() => {
-    if (
-      DEBUG &&
-      mainnetProvider &&
-      address &&
-      selectedChainId &&
-      yourLocalBalance &&
-      yourMainnetBalance &&
-      readContracts &&
-      writeContracts &&
-      mainnetContracts
-    ) {
-      console.log("_____________________________________ 🏗 scaffold-eth _____________________________________");
-
-      console.log("🌎 mainnetProvider", mainnetProvider);
-      // console.log('🏠 localChainId', localChainId);
-      // console.log('👩‍💼 selected address:', address);
-      // console.log('🕵🏻‍♂️ selectedChainId:', selectedChainId);
-      // console.log('💵 yourLocalBalance', yourLocalBalance ? ethers.utils.formatEther(yourLocalBalance) : '...');
-      // console.log('💵 yourMainnetBalance', yourMainnetBalance ? ethers.utils.formatEther(yourMainnetBalance) : '...');
-      // console.log('📝 readContracts', readContracts);
-      // console.log('🌍 DAI contract on mainnet:', mainnetContracts);
-      // console.log('💵 yourMainnetDAIBalance', myMainnetDAIBalance);
-      // console.log('🔐 writeContracts', writeContracts);
+    console.log("_____________________________________ 🏗 scaffold-eth _____________________________________");
+    let walletAddress = address;
+    let provider = injectedProvider;
+    if (contract && injectedProvider && address && !initiateEventListeners) {
+      console.log("🌎 injectedProvider", injectedProvider);
+      createEventListeners({
+        navigate,
+        contract,
+        provider,
+        walletAddress,
+        setShowAlert,
+        player1Ref,
+        player2Ref,
+        setUpdateGameData,
+      });
+      console.log("listener for event");
+      setInitiateEventListeners(true);
     }
     setBattleStateChange(!battleStateChange);
   }, [
@@ -416,6 +300,7 @@ const StateContext = ({ children }) => {
     localChainId,
     myMainnetDAIBalance,
     contract,
+    step,
   ]);
 
   const loadWeb3Modal = useCallback(async () => {

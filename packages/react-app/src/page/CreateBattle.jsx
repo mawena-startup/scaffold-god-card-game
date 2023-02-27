@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "../styles";
 
-import { CustomButton, CustomInput, GameLoad, PageHOC } from "../components/avaxgods";
+import { CustomButton, CustomInput, GameLoad, PageHOC } from "../components/scaffoldGods";
 import { useStateContext } from "../context/StateContext";
 
 const CreateBattle = () => {
@@ -38,7 +38,7 @@ const CreateBattle = () => {
 
     try {
       // await contract.createBattle(battleName);
-      await tx(writeContracts.AVAXGods.createBattle(battleName), update => {
+      await tx(writeContracts.ScaffoldGods.createBattle(battleName), update => {
         console.log("📡 Transaction Update:", update);
         if (update && (update.status === "confirmed" || update.status === 1)) {
           console.log(" 🍾 Transaction " + update.hash + " finished!");

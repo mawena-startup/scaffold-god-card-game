@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import styles from "../styles";
-import { ActionButton, Alert, Card, GameInfo, PlayerInfo } from "../components/avaxgods";
+import { ActionButton, Alert, Card, GameInfo, PlayerInfo } from "../components/scaffoldGods";
 
 import {
   attack,
@@ -70,12 +70,12 @@ const Battle = () => {
     };
 
     if (contract && gameData.activeBattle) getPlayerInfo();
-  }, [contract, gameData, battleName, battleStateChange, writeContracts]);
+  }, [contract, gameData, battleName, battleStateChange, writeContracts, battleStateChange]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!gameData?.activeBattle) navigate("/");
-    }, [2000]);
+    }, [500]);
 
     return () => clearTimeout(timer);
   }, []);
@@ -85,14 +85,14 @@ const Battle = () => {
 
     try {
       // await contract.attackOrDefendChoice(choice, battleName, { gasLimit: 200000 });
-      await tx(writeContracts.AVAXGods.attackOrDefendChoice(choice, battleName, { gasLimit: 300000 }), update => {
+      await tx(writeContracts.ScaffoldGods.attackOrDefendChoice(choice, battleName, { gasLimit: 300000 }), update => {
         if (update && (update.status === "confirmed" || update.status === 1)) {
-          setBattleStateChange(!battleStateChange);
           setShowAlert({
             status: true,
             type: "info",
             message: `Initiating ${choice === 1 ? "attack" : "defense"}`,
           });
+          setBattleStateChange(!battleStateChange);
         } else {
           console.log(update.message);
         }

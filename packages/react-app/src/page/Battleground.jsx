@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import styles from "../styles";
-import { Alert } from "../components/avaxgods";
+import { Alert } from "../components/scaffoldGods";
 import { battlegrounds } from "../assets";
 
 import { useStateContext } from "../context/StateContext";
