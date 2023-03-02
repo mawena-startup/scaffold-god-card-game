@@ -16,7 +16,7 @@ const GameInfo = () => {
 
     try {
       // await contract.quitBattle(battleName);
-      await tx(writeContracts.AVAXGods.quitBattle(battleName));
+      await tx(writeContracts.ScaffoldGods.quitBattle(battleName));
 
       setShowAlert({ status: true, type: "info", message: `You're quitting the ${battleName}` });
       navigate("/create-battle");
