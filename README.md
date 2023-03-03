@@ -17,7 +17,7 @@ git clone https://github.com/KcPele/avaxgods-scaffold-eth-card-game.git
 > install and start your 👷‍ Hardhat chain:
 
 ```bash
-cd avaxgods-scaffold-eth-card-game
+cd scaffold-god-card-game
 yarn install
 yarn chain
 ```
@@ -25,14 +25,14 @@ yarn chain
 > in a second terminal window, start your 📱 frontend:
 
 ```bash
-cd avaxgods-scaffold-eth-card-game
+cd scaffold-god-card-game
 yarn deploy
 ```
 
 > in a third terminal window, 🛰 deploy your contract:
 
 ```bash
-cd avaxgods-scaffold-eth-card-game
+cd scaffold-god-card-game
 yarn start
 
 
