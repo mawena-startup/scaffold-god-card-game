@@ -3,18 +3,24 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "../styles";
 import { Alert } from "../components/scaffoldGods";
-import { battlegrounds } from "../assets";
 
 import { useStateContext } from "../context/StateContext";
+
+export const battlegrounds = [
+  { id: "bg-saiman", image: "/assets/background/saiman.jpg", name: "Saiman" },
+  { id: "bg-astral", image: "/assets/background/astral.jpg", name: "Astral" },
+  { id: "bg-eoaalien", image: "/assets/background/eoaalien.jpg", name: "Eoaalien" },
+  { id: "bg-panight", image: "/assets/background/panight.jpg", name: "Panight" },
+];
 
 const Battleground = () => {
   const navigate = useNavigate();
   const { setBattleGround, setShowAlert, showAlert } = useStateContext();
 
   const handleBattleChoice = ground => {
-    setBattleGround(ground.id);
+    setBattleGround(ground.image);
 
-    localStorage.setItem("battleground", ground.id);
+    localStorage.setItem("battleground", ground.image);
 
     setShowAlert({ status: true, type: "info", message: `${ground.name} is battle ready!` });
 

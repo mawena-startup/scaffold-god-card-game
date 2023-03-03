@@ -1,16 +1,15 @@
 import { ethers } from "ethers";
 
-import deployedContracts from "../contracts/hardhat_contracts.json";
+import deployedContracts from "./hardhat_contracts.json";
 import { NETWORKS } from "../constants";
 import { playAudio, sparcle } from "../utils/animation.js";
-import { defenseSound } from "../assets";
 
 const AddNewEvent = (eventFilter, provider, cb) => {
   provider.removeListener(eventFilter);
 
   provider.on(eventFilter, logs => {
     const parsedLog = new ethers.utils.Interface(
-      deployedContracts[NETWORKS.localhost.chainId].localhost.contracts.ScaffoldGods.abi,
+      deployedContracts[NETWORKS.goerli.chainId].goerli.contracts.ScaffoldGods.abi,
     ).parseLog(logs);
 
     cb(parsedLog);
@@ -98,7 +97,7 @@ export const createEventListeners = ({
           sparcle(getCoords(player2Ref));
         }
       } else {
-        playAudio(defenseSound);
+        playAudio("/assets/sounds/defense.mp3");
       }
     }
 
@@ -114,6 +113,6 @@ export const createEventListeners = ({
       setShowAlert({ status: true, type: "failure", message: "You lost!" });
     }
 
-    navigate("/create-battle");
+    return navigate("/create-battle");
   });
 };

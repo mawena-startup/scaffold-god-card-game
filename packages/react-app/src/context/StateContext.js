@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { NETWORKS, ALCHEMY_KEY } from "../constants";
 import externalContracts from "../contracts/external_contracts";
 // contracts
-import deployedContracts from "../contracts/hardhat_contracts.json";
+import deployedContracts from "./hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "../helpers";
 
 import { useStaticJsonRPC } from "../hooks";
@@ -43,7 +43,7 @@ const { ethers } = require("ethers");
 */
 
 /// 📡 What chain are your contracts deployed to?
-const initialNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, goerli, xdai, mainnet)
+const initialNetwork = NETWORKS.goerli; // <------- select your target frontend network (localhost, goerli, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = false;
@@ -72,7 +72,7 @@ const StateContext = ({ children }) => {
 
   //custom context
 
-  const [battleGround, setBattleGround] = useState("url('/src/assets/background/astral.jpg')");
+  const [battleGround, setBattleGround] = useState("/assets/background/astral.jpg");
   const [step, setStep] = useState(1);
   const [gameData, setGameData] = useState({ players: [], pendingBattles: [], activeBattle: null });
   const [showAlert, setShowAlert] = useState({ status: false, type: "info", message: "" });
@@ -221,8 +221,8 @@ const StateContext = ({ children }) => {
     const setSmartContractAndProvider = async () => {
       if (userSigner) {
         const newContract = new ethers.Contract(
-          contractConfig.deployedContracts[targetNetwork.chainId].localhost.contracts.ScaffoldGods.address,
-          contractConfig.deployedContracts[targetNetwork.chainId].localhost.contracts.ScaffoldGods.abi,
+          contractConfig.deployedContracts[targetNetwork.chainId].goerli.contracts.ScaffoldGods.address,
+          contractConfig.deployedContracts[targetNetwork.chainId].goerli.contracts.ScaffoldGods.abi,
           userSigner,
         );
 

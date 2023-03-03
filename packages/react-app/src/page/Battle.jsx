@@ -5,14 +5,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import styles from "../styles";
 import { ActionButton, Alert, Card, GameInfo, PlayerInfo } from "../components/scaffoldGods";
 
-import {
-  attack,
-  attackSound,
-  defense,
-  defenseSound,
-  player01 as player01Icon,
-  player02 as player02Icon,
-} from "../assets";
 import { playAudio } from "../utils/animation.js";
 import { useStateContext } from "../context/StateContext";
 
@@ -74,14 +66,14 @@ const Battle = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (!gameData?.activeBattle) navigate("/");
+      if (!gameData?.activeBattle) return navigate("/");
     }, [500]);
 
     return () => clearTimeout(timer);
   }, []);
 
   const makeAMove = async choice => {
-    playAudio(choice === 1 ? attackSound : defenseSound);
+    playAudio(choice === 1 ? "/assets/sounds/attack.wav" : "/assets/sounds/defense.mp3");
 
     try {
       // await contract.attackOrDefendChoice(choice, battleName, { gasLimit: 200000 });
@@ -103,24 +95,35 @@ const Battle = () => {
   };
 
   return (
-    <div className={`${styles.flexBetween} ${styles.gameContainer} ${battleGround}`}>
+    <div
+      className={`${styles.flexBetween} ${styles.gameContainer} `}
+      style={{ backgroundImage: `url(${battleGround})` }}
+    >
       {showAlert?.status && <Alert type={showAlert.type} message={showAlert.message} />}
 
-      <PlayerInfo player={player2} playerIcon={player02Icon} mt />
+      <PlayerInfo player={player2} playerIcon="/assets/player02.png" mt />
 
       <div className={`${styles.flexCenter} flex-col my-10`}>
         <Card card={player2} title={player2?.playerName} cardRef={player2Ref} playerTwo />
 
         <div className="flex items-center flex-row">
-          <ActionButton imgUrl={attack} handleClick={() => makeAMove(1)} restStyles="mr-2 hover:border-yellow-400" />
+          <ActionButton
+            imgUrl="/assets/attack.png"
+            handleClick={() => makeAMove(1)}
+            restStyles="mr-2 hover:border-yellow-400"
+          />
 
           <Card card={player1} title={player1?.playerName} cardRef={player1Ref} restStyles="mt-3" />
 
-          <ActionButton imgUrl={defense} handleClick={() => makeAMove(2)} restStyles="ml-6 hover:border-red-600" />
+          <ActionButton
+            imgUrl="/assets/defense.png"
+            handleClick={() => makeAMove(2)}
+            restStyles="ml-6 hover:border-red-600"
+          />
         </div>
       </div>
 
-      <PlayerInfo player={player1} playerIcon={player01Icon} />
+      <PlayerInfo player={player1} playerIcon="/assets/player01.png" />
 
       <GameInfo />
     </div>

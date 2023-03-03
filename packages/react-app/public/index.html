@@ -24,7 +24,7 @@
 
     <!-- Tailwind CSS CDN for faster local development -->
     <link rel="stylesheet" href="%PUBLIC_URL%/index.css" />
-    <% if (process.env.NODE_ENV === 'development') { %>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -37,14 +37,7 @@
               siteViolet: "#7f46f0",
               siteWhite: "#9eacc7",
             },
-            backgroundImage: {
-              astral: "url('/src/assets/background/astral.jpg')",
-              saiman: "url('/src/assets/background/saiman.jpg')",
-              eoaalien: "url('/src/assets/background/eoaalien.jpg')",
-              panight: "url('/src/assets/background/panight.jpg')",
-              heroImg: "url('/src/assets/background/hero-img.jpg')",
-              landing: "url('/src/assets/background/landing.jpg')",
-            },
+
             fontFamily: {
               rajdhani: ["Rajdhani", "sans-serif"],
             },
@@ -52,8 +45,8 @@
         },
       };
     </script>
-    <% } %>
-    <title>Ethereum App</title>
+
+    <title>ScaffoldGods</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
