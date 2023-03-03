@@ -112,11 +112,19 @@ const Battle = () => {
         <Card card={player2} title={player2?.playerName} cardRef={player2Ref} playerTwo />
 
         <div className="flex items-center flex-row">
-          <ActionButton imgUrl={attack} handleClick={() => makeAMove(1)} restStyles="mr-2 hover:border-yellow-400" />
+          <ActionButton
+            imgUrl="/assets/attack.png"
+            handleClick={() => makeAMove(1)}
+            restStyles="mr-2 hover:border-yellow-400"
+          />
 
           <Card card={player1} title={player1?.playerName} cardRef={player1Ref} restStyles="mt-3" />
 
-          <ActionButton imgUrl={defense} handleClick={() => makeAMove(2)} restStyles="ml-6 hover:border-red-600" />
+          <ActionButton
+            imgUrl="/assets/defense.png"
+            handleClick={() => makeAMove(2)}
+            restStyles="ml-6 hover:border-red-600"
+          />
         </div>
       </div>
 
