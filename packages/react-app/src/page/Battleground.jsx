@@ -3,9 +3,15 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "../styles";
 import { Alert } from "../components/scaffoldGods";
-import { battlegrounds } from "../assets";
 
 import { useStateContext } from "../context/StateContext";
+
+export const battlegrounds = [
+  { id: "bg-saiman", image: "/assets/background/saiman.jpg", name: "Saiman" },
+  { id: "bg-astral", image: "/assets/background/astral.jpg", name: "Astral" },
+  { id: "bg-eoaalien", image: "/assets/background/eoaalien.jpg", name: "Eoaalien" },
+  { id: "bg-panight", image: "/assets/background/panight.jpg", name: "Panight" },
+];
 
 const Battleground = () => {
   const navigate = useNavigate();

@@ -3,7 +3,6 @@ import { ethers } from "ethers";
 import deployedContracts from "./hardhat_contracts.json";
 import { NETWORKS } from "../constants";
 import { playAudio, sparcle } from "../utils/animation.js";
-import { defenseSound } from "../assets";
 
 const AddNewEvent = (eventFilter, provider, cb) => {
   provider.removeListener(eventFilter);
@@ -98,7 +97,7 @@ export const createEventListeners = ({
           sparcle(getCoords(player2Ref));
         }
       } else {
-        playAudio(defenseSound);
+        playAudio("/assets/sounds/defense.mp3");
       }
     }
 

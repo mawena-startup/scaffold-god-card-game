@@ -3,14 +3,20 @@ import { useNavigate } from "react-router-dom";
 
 import CustomButton from "./CustomButton";
 import { useStateContext } from "../../context/StateContext";
-import { alertIcon, gameRules } from "../../assets";
 import styles from "../../styles";
 
 const GameInfo = () => {
   const { gameData, setErrorMessage, setShowAlert, tx, writeContracts } = useStateContext();
   const [toggleSidebar, setToggleSidebar] = useState(false);
   const navigate = useNavigate();
-
+  const gameRules = [
+    "Card with the same defense and attack point will cancel each other out.",
+    "Attack points from the attacking card will deduct the opposing player’s health points.",
+    "If P1 does not defend, their health wil be deducted by P2’s attack.",
+    "If P1 defends, P2’s attack is equal to P2’s attack - P1’s defense.",
+    "If a player defends, they refill 3 Mana",
+    "If a player attacks, they spend 3 Mana",
+  ];
   const handleBattleExit = async () => {
     const battleName = gameData.activeBattle.name;
 
@@ -30,7 +36,7 @@ const GameInfo = () => {
     <>
       <div className={styles.gameInfoIconBox}>
         <div className={`${styles.gameInfoIcon} ${styles.flexCenter}`} onClick={() => setToggleSidebar(true)}>
-          <img src={alertIcon} alt="info" className={styles.gameInfoIconImg} />
+          <img src="/assets/alertIcon.svg" alt="info" className={styles.gameInfoIconImg} />
         </div>
       </div>
       {toggleSidebar && (

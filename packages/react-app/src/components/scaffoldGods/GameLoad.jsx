@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import CustomButton from "./CustomButton";
 
-import { player01, player02 } from "../../assets";
 import styles from "../../styles";
 import { useStateContext } from "../../context/StateContext";
 
@@ -25,14 +24,14 @@ const GameLoad = () => {
 
         <div className={styles.gameLoadPlayersBox}>
           <div className={`${styles.flexCenter} flex-col`}>
-            <img src={player01} className={styles.gameLoadPlayerImg} />
+            <img src="/assets/player01.png" className={styles.gameLoadPlayerImg} />
             {address && <p className={styles.gameLoadPlayerText}>{address.slice(0, 20)}</p>}
           </div>
 
           <h2 className={styles.gameLoadVS}>Vs</h2>
 
           <div className={`${styles.flexCenter} flex-col`}>
-            <img src={player02} className={styles.gameLoadPlayerImg} />
+            <img src="/assets/player02.png" className={styles.gameLoadPlayerImg} />
             <p className={styles.gameLoadPlayerText}>??????????</p>
           </div>
         </div>

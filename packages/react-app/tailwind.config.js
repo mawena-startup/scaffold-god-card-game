@@ -11,12 +11,12 @@ module.exports = {
         siteWhite: "#9eacc7",
       },
       backgroundImage: {
-        astral: "url('/src/assets/background/astral.jpg')",
-        saiman: "url('/src/assets/background/saiman.jpg')",
-        eoaalien: "url('/src/assets/background/eoaalien.jpg')",
-        panight: "url('/src/assets/background/panight.jpg')",
-        heroImg: "url('/src/assets/background/hero-img.jpg')",
-        landing: "url('/src/assets/background/landing.jpg')",
+        astral: "url('./assets/background/astral.jpg')",
+        saiman: "url('./assets/background/saiman.jpg')",
+        eoaalien: "url('./assets/background/eoaalien.jpg')",
+        panight: "url('./assets/background/panight.jpg')",
+        heroImg: "url('./assets/background/hero-img.jpg')",
+        landing: "url('./assets/background/landing.jpg')",
       },
       fontFamily: {
         rajdhani: ["Rajdhani", "sans-serif"],

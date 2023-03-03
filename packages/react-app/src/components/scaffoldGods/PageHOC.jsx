@@ -1,6 +1,5 @@
 import React from "react";
 
-import { heroImg } from "../../assets";
 import styles from "../../styles";
 
 import Navbar from "./Navbar";
@@ -22,7 +21,7 @@ const PageHOC = (Component, title, description) => () => {
       </div>
 
       <div className="flex flex-1">
-        <img src={heroImg} alt="hero-img" className="w-full xl:h-full object-cover" />
+        <img src="/assets/background/hero-img.jpg" alt="hero-img" className="w-full xl:h-full object-cover" />
       </div>
     </div>
   );
