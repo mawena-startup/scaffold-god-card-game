@@ -1,6 +1,6 @@
 import React from "react";
 
-import { AlertIcon } from "../../assets";
+import AlertIcon from "./AlertIcon.jsx";
 import styles from "../../styles";
 
 const Alert = ({ type, message }) => (
