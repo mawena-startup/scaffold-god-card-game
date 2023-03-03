@@ -18,9 +18,9 @@ const Battleground = () => {
   const { setBattleGround, setShowAlert, showAlert } = useStateContext();
 
   const handleBattleChoice = ground => {
-    setBattleGround(ground.id);
+    setBattleGround(ground.image);
 
-    localStorage.setItem("battleground", ground.id);
+    localStorage.setItem("battleground", ground.image);
 
     setShowAlert({ status: true, type: "info", message: `${ground.name} is battle ready!` });
 

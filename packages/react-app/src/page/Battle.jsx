@@ -95,7 +95,10 @@ const Battle = () => {
   };
 
   return (
-    <div className={`${styles.flexBetween} ${styles.gameContainer} ${battleGround}`}>
+    <div
+      className={`${styles.flexBetween} ${styles.gameContainer} `}
+      style={{ backgroundImage: `url(${battleGround})` }}
+    >
       {showAlert?.status && <Alert type={showAlert.type} message={showAlert.message} />}
 
       <PlayerInfo player={player2} playerIcon="/assets/player02.png" mt />
