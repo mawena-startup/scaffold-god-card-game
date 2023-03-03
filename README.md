@@ -2,12 +2,14 @@
 
 # Scafold Gods - Online Multiplayer Web3 NFT Card Game
 
-
 ![Gameplay](https://i.ibb.co/4P2C08x/image.png)
 
 # 🏄‍♂️ Quick Start
 
 Prerequisites: [Node (v16 LTS)](https://nodejs.org/en/download/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/) and [Git](https://git-scm.com/downloads)
+
+\*\*\*Network for testing
+Goerli
 
 > clone/fork 🏗 scaffold-eth:
 
@@ -44,4 +46,3 @@ yarn start
 
 
 ```
-

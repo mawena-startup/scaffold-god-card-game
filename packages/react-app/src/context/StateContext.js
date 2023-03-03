@@ -72,7 +72,7 @@ const StateContext = ({ children }) => {
 
   //custom context
 
-  const [battleGround, setBattleGround] = useState("url('/src/assets/background/astral.jpg')");
+  const [battleGround, setBattleGround] = useState("/assets/background/astral.jpg");
   const [step, setStep] = useState(1);
   const [gameData, setGameData] = useState({ players: [], pendingBattles: [], activeBattle: null });
   const [showAlert, setShowAlert] = useState({ status: false, type: "info", message: "" });
