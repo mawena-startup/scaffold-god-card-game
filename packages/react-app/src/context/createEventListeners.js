@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 
-import deployedContracts from "../contracts/hardhat_contracts.json";
+import deployedContracts from "./hardhat_contracts.json";
 import { NETWORKS } from "../constants";
 import { playAudio, sparcle } from "../utils/animation.js";
 import { defenseSound } from "../assets";
