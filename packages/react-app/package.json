@@ -91,8 +91,8 @@
     }
   },
   "scripts": {
-    "build": "craco --openssl-legacy-provider build",
-    "start": "craco  --openssl-legacy-provider start",
+    "build": "craco build --openssl-legacy-provider",
+    "start": "craco start --openssl-legacy-provider ",
     "test": "craco test",
     "eject": "react-scripts eject",
     "prestart": "node ./scripts/create_contracts.js",
